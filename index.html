@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset = "utf-8" />
+        <meta http-equiv = "x-ua-compatible" content = "ie = edge" />
+        <meta name = "viewport" content = "width = device-width, initial-scale = 1.0" />
+    <title>My Sticker</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+    <!--<link rel="stylesheet" href="dist/css/foundation-flex.css">-->
+<!--    <script src="dist/jquery-1.8.3.min.js"></script>-->
+    <script src="dist/jquery.cropit.js"></script>
+    <link rel="stylesheet" href="dist/css/app.css">
+
+
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-storage.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Sriracha" rel="stylesheet" type='text/css'>
+
+</head>
+<body>
+<div class="image-editor">
+    <input type="file" class="cropit-image-input">
+  <div class="cropit-preview"></div>
+
+    <div class="image-size-label">
+        Resize image
+    </div>
+    <input type="range" class="cropit-image-zoom-input">
+    <button class="rotate-ccw">Rotate counterclockwise</button>
+    <button class="rotate-cw">Rotate clockwise</button>
+
+    <button class="export">Export</button>
+</div>
+<canvas id="canvas1" width="370" height="320" ondrop="drop(event)" ondragover="allowDrop(event)"></canvas>
+<button onclick ="showMeImage()">Show Example</button>
+<script>
+
+    $(function() {
+/*        $('.image-editor').cropit({
+            imageState: {
+                src: 'http://lorempixel.com/500/400/',
+            },
+        });*/
+        $('.image-editor').cropit( );
+        $('.rotate-cw').click(function() {
+            $('.image-editor').cropit('rotateCW');
+        });
+        $('.rotate-ccw').click(function() {
+            $('.image-editor').cropit('rotateCCW');
+        });
+
+        $('.export').click(function() {
+            /* Initialize Firebase
+            var config = {
+                apiKey: "AIzaSyA83WDgXFYbIXc6wI0D6tpShrIhMW8teRQ",
+                authDomain: "mysticker-f7d1e.firebaseapp.com",
+                databaseURL: "https://mysticker-f7d1e.firebaseio.com",
+                projectId: "mysticker-f7d1e",
+                storageBucket: "mysticker-f7d1e.appspot.com",
+                messagingSenderId: "342976982342"
+            };
+            firebase.initializeApp(config);
+            */
+            var imageData = $('.image-editor').cropit('export', {
+                    quality: 1
+            });
+           var c = document.getElementById("canvas1");
+           var context_can = c.getContext("2d");
+            var image = new Image();
+            image.onload = function() {
+                context_can.drawImage(image, 0, 0);
+                context_can.font = "35pt Sriracha";
+                context_can.fillStyle = "red"
+                context_can.strokeStyle = 'black';
+                context_can.lineWidth = 3
+                context_can.fillText("รักแม่", 40, 40);
+                context_can.strokeText("รักแม่", 40, 40);
+                context_can .fill();
+                context_can.stroke();
+            };
+            image.src = imageData;
+
+            // window.open(imageData);
+            // console.log(imageData);
+            /*   convert imageData to file object for firebase.put()
+            var byteString = atob(imageData.split(',')[1]);
+            var ab = new ArrayBuffer(byteString.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            var blob = new Blob([ia], {
+                type: 'image/png'
+            });
+            var file = new File([blob], "image.png");
+            */
+            /*  put file to firebase
+            var storageRef = firebase.storage().ref("eak/image.png");
+            var uploadTask = storageRef.put(file);
+            uploadTask.on('state_changed', function progress(snapshot) {
+                console.log(snapshot.bytesTransferred); // progress of upload
+            }); */
+
+
+        });
+    });
+    function showMeImage(){
+        console.log('inshowme')
+        let c = document.getElementById("canvas1");
+
+        var w=window.open('about:blank','image from canvas');
+        w.document.write("<img src='"+c.toDataURL("image/png")+"' alt='from canvas'/>")
+
+    }
+</script>
+
+</body>
+</html>
