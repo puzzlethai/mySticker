@@ -9,12 +9,14 @@
     <!--<link rel="stylesheet" href="dist/css/foundation-flex.css">-->
 <!--    <script src="dist/jquery-1.8.3.min.js"></script>-->
     <script src="dist/jquery.cropit.js"></script>
+    <script src="dist/jquery-ui.js"></script>
     <link rel="stylesheet" href="dist/css/app.css">
 
 
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase.js"></script>
     <script src="https://www.gstatic.com/firebasejs/4.1.1/firebase-storage.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Sriracha" rel="stylesheet" type='text/css'>
+
 
 </head>
 <body>
@@ -31,9 +33,69 @@
 
     <button class="export">Export</button>
 </div>
-<canvas id="canvas1" width="370" height="320" ondrop="drop(event)" ondragover="allowDrop(event)"></canvas>
+<div id="dropThis">
+<canvas id="canvas1" width="370" height="320" ></canvas>
+</div>
+
+<div id="dragThis">
+    <canvas id="txtCanvas" width="100" height="100" ></canvas>
+</div>
+
+
 <button onclick ="showMeImage()">Show Example</button>
+<br>
+<canvas id="canvas2" width="370" height="320" ></canvas>
+</div>
 <script>
+    var xPos, yPos,posX,posY;
+    var imageData,c,context_can,image;
+
+    $('#dropThis').droppable(
+        { drop: function(){
+    console.log("in on drop");
+
+
+            console.log("xPos -->"+xPos+"  yPos -->"+yPos);
+            var eTop = $('#canvas1').offset().top//-$(window).scrollTop();
+            var eLeft = $('#canvas1').offset().left//-$(window).scrollLeft();
+            console.log("eTop -->"+eTop+"eLeft -->"+eLeft);
+             posX =xPos-eLeft;
+             posY =yPos-eTop;
+            console.log("xPos -->"+posX+"  yPos -->"+posY);
+    /*        context_can.font = "35pt Sriracha";
+            context_can.fillStyle = "red"
+            context_can.strokeStyle = 'black';
+            context_can.lineWidth = 3
+            context_can.fillText("รักแม่", xPos, yPos);
+            context_can.strokeText("รักแม่", xPos, yPos);
+            context_can .fill();
+            context_can.stroke();*/
+
+
+
+/*    var imageData2 = $('.image-editor').cropit('export', {
+        quality: 1
+    });
+    var c2 = document.getElementById("canvas1");
+    var context_can2 = c2.getContext("2d");
+    var image2 = new Image();
+
+    image2.onload = function() {
+        context_can2.clearRect(0, 0, c2.width, c2.height);
+        context_can2.drawImage(image2, 0, 0);
+        context_can2.font = "35pt Sriracha";
+         context_can2.fillStyle = "red"
+         context_can2.strokeStyle = 'black';
+         context_can2.lineWidth = 3
+         context_can2.fillText("รักแม่",xPos, yPos);
+         context_can2.strokeText("รักแม่",xPos, yPos);
+         context_can2 .fill();
+         context_can2.stroke();
+    };
+    image2.src = imageData2;*/
+//    event.preventDefault();
+
+}});
 
     $(function() {
 /*        $('.image-editor').cropit({
@@ -61,24 +123,39 @@
             };
             firebase.initializeApp(config);
             */
-            var imageData = $('.image-editor').cropit('export', {
+             imageData = $('.image-editor').cropit('export', {
                     quality: 1
             });
-           var c = document.getElementById("canvas1");
-           var context_can = c.getContext("2d");
-            var image = new Image();
+
+            c = $("#canvas1").get(0);
+           context_can = c.getContext("2d");
+             image = new Image();
             image.onload = function() {
                 context_can.drawImage(image, 0, 0);
-                context_can.font = "35pt Sriracha";
+/*                context_can.font = "35pt Sriracha";
                 context_can.fillStyle = "red"
                 context_can.strokeStyle = 'black';
                 context_can.lineWidth = 3
                 context_can.fillText("รักแม่", 40, 40);
                 context_can.strokeText("รักแม่", 40, 40);
                 context_can .fill();
-                context_can.stroke();
+                context_can.stroke();*/
             };
             image.src = imageData;
+            var d = document.getElementById("txtCanvas");
+            var cont_cantext = d.getContext("2d");
+            cont_cantext.textAlign = "left";
+            cont_cantext.textBaseline ="top";
+            cont_cantext.font = "35pt Sriracha";
+            cont_cantext.fillStyle = "red"
+            cont_cantext.strokeStyle = 'black';
+            cont_cantext.lineWidth = 3
+            cont_cantext.fillText("รักแม่", 0, 0);
+            cont_cantext.strokeText("รักแม่", 0, 0);
+            cont_cantext .fill();
+            cont_cantext.stroke();
+
+
 
             // window.open(imageData);
             // console.log(imageData);
@@ -104,14 +181,63 @@
 
         });
     });
-    function showMeImage(){
-        console.log('inshowme')
-        let c = document.getElementById("canvas1");
 
+    function showMeImage(){
+        //console.log('inshowme');
+        //let context3 = document.getElementById("canvas1");
+        // context_can.clearRect(0, 0, c.width, c.height);
+//        var c3 = document.getElementById("canvas2");
+//        var context_can3 = c3.getContext("2d");
+//        var image3 = new Image();
+//        var eTop = $('#canvas2').offset().top-$(window).scrollTop();
+//        var eLeft = $('#canvas2').offset().left-$(window).scrollLeft();
+//        var posX =xPos-eLeft;
+//        var posY =yPos-eTop;
+//        image3.onload = function() {
+//            console.log("xPos -->"+posX+"  yPos -->"+posY);
+//            context_can3.drawImage(image3, 0, 0);
+//            context_can3.textAlign = "left";
+//            context_can3.textBaseline ="top";
+//            context_can3.font = "35pt Sriracha";
+//            context_can3.fillStyle = "red"
+//            context_can3.strokeStyle = 'black';
+//            context_can3.lineWidth = 3
+//            context_can3.fillText("รักแม่", posX,posY);
+//            context_can3.strokeText("รักแม่", posX, posY);
+//            context_can3 .fill();
+//            context_can3.stroke();
+//        };
+//        image3.src = imageData;
+context_can.textAlign ="left";
+context_can.textBaseline ="top";
+        context_can.font = "35pt Sriracha";
+        context_can.fillStyle = "red"
+        context_can.strokeStyle = 'black';
+        context_can.lineWidth = 3
+        context_can.fillText("รักแม่", posX, posY-17);
+        context_can.strokeText("รักแม่", posX, posY-17);
+        context_can.fill();
+        context_can.stroke();
         var w=window.open('about:blank','image from canvas');
-        w.document.write("<img src='"+c.toDataURL("image/png")+"' alt='from canvas'/>")
+        w.document.write("<img src='"+ c.toDataURL("image/png")+"' alt='from canvas'/>")
 
     }
+
+
+        $('#dragThis').draggable(
+            {
+
+                drag: function(){
+                    //console.log("in on drag");
+                   var offset = $(this).offset();
+                    xPos = offset.left;
+                    yPos = offset.top;
+                   // console.log("xPos -->"+xPos+"  yPos -->"+yPos);
+//                $('#posX').text('x: ' + xPos);
+//                $('#posY').text('y: ' + yPos);
+                }
+            });
+
 </script>
 
 </body>
